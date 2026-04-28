@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, EmailStr
 
 
 class UserBase(BaseModel):
@@ -8,6 +8,11 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     pass
+
+class UserUpdate(BaseModel):
+    username: str | None = Field(default=None, min_length=1, max_length=50)
+    email: EmailStr | None = Field(default=None, max_length=150)
+    image_file: str | None = Field(default=None,min_length=1, max_length=200)
 
 class UserResponse(UserBase):
     model_config = ConfigDict(from_attributes=True)
@@ -23,6 +28,10 @@ class PostBase(BaseModel):
 # Create Post schema
 class PostCreate(PostBase):
     user_id: int  #Temporary
+
+class PostUpdate(BaseModel):
+    title: str = Field(default=None, max_length=100)
+    content: str = Field(default=None, min_length=1)
 
 # Create Post response
 class PostResponse(PostBase):
